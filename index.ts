@@ -14,13 +14,23 @@ const server = Bun.serve<{ userId: string; channelId: string }>({
         console.log("room", roomId);
         // const token = req.headers.get("Authorization");
         // const token = req.headers.get("authjs.session-token");
+
+        // cookie is in string format
         const cookieFromHeaders = req.headers.get("Cookie");
+
+        // we use cookie library and parse to convert to an Object
         var parsedCookie = cookie.parse(cookieFromHeaders);
+
         // console.log("cookie", parsedCookie);
+
+        // now that cookie is an object we can get JWT value by accessing the key called Auth...
         const token = parsedCookie["Authorization"];
+
         console.log("token", token);
         // console.log("token", typeof token);
+        
         const decoded = jwt.verify(token, secret);
+
         console.log("userId", decoded);
         const userId = decoded.sub;
         const success = server.upgrade(req, {
