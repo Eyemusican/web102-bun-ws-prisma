@@ -84,7 +84,16 @@ const server = Bun.serve<{ userId: string; channelId: string }>({
       // so the server re-broadcasts incoming message to everyone
 
       // 2. receive auction bid where user send me productid and bid price
+
+
+      if (parsedMessage?.event == "bid" ) {
+        server.publish(ws.data.channelId, JSON.stringify(parsedMessage));
+      }
+
+    
     },
+
+
     close(ws) {
       const msg = `${ws.data.userId} has left the chat in channel ${ws.data.channelId}`;
       ws.unsubscribe(ws.data.channelId);
